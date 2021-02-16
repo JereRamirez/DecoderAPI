@@ -8,28 +8,26 @@ import java.util.Map;
 public abstract class MessageUtils {
 
     public static final String INVALID_STRING = "invalidString";
-    public static final String SHORTEST_KEY = "shortest";
-    public static final String LARGEST_KEY = "largest";
 
     private MessageUtils(){}
 
     public static String getMessage(String[]... messages){
         String[] thirdSatelliteMessage = messages[2];
-        String[] message = backTrackMessage(0, messages[0], messages[1]);
-        return String.join(" ", backTrackMessage(0, message, thirdSatelliteMessage));
+        String[] message = backtrackMessage(0, messages[0], messages[1]);
+        return String.join(" ", backtrackMessage(0, message, thirdSatelliteMessage));
     }
 
-    private static String[] backTrackMessage(int backTrackingStep, String[] firstMessage, String[] secondMessage) {
-        if(backTrackingStep < 0)
+    private static String[] backtrackMessage(int backtrackingStep, String[] firstMessage, String[] secondMessage) {
+        if(backtrackingStep < 0)
             return new String[]{INVALID_STRING};
 
         boolean isValidState = true;
         List<String> wordsList = new ArrayList<>();
 
-        Map<String, String[]> messagesMap = arrangeMessages(firstMessage, secondMessage);
-        String[] shortestArray = messagesMap.get(SHORTEST_KEY);
-        String[] largestArray = messagesMap.get(LARGEST_KEY);
-        int largestArrayIndex = backTrackingStep;
+        List<String[]> arrengedMessages = arrangeMessages(firstMessage, secondMessage);
+        String[] shortestArray = arrengedMessages.get(0);
+        String[] largestArray = arrengedMessages.get(1);
+        int largestArrayIndex = backtrackingStep;
 
         for (String oneWord : shortestArray) {
             if (largestArrayIndex == largestArray.length) {
@@ -50,26 +48,26 @@ public abstract class MessageUtils {
         if(isValidState)
             return wordsList.toArray(new String[0]);
 
-        int nextBackTrackingStep = backTrackingStep < largestArray.length ? ++backTrackingStep : -1;
+        int nextBacktrackingStep = backtrackingStep < largestArray.length ? ++backtrackingStep : -1;
 
-        return backTrackMessage(nextBackTrackingStep, largestArray, shortestArray);
+        return backtrackMessage(nextBacktrackingStep, largestArray, shortestArray);
     }
 
-    private static Map<String, String[]> arrangeMessages(String[] firstMessage, String[] secondMessage){
-        HashMap<String, String[]> messagesMap;
+    private static List<String[]> arrangeMessages(String[] firstMessage, String[] secondMessage){
+        List<String[]> messagesList;
         if(firstMessage.length > secondMessage.length)
-            messagesMap = getArrangedMap(secondMessage, firstMessage);
+            messagesList = getArrangedList(secondMessage, firstMessage);
         else
-            messagesMap = getArrangedMap(firstMessage, secondMessage);
+            messagesList = getArrangedList(firstMessage, secondMessage);
 
-        return messagesMap;
+        return messagesList;
     }
 
-    private static HashMap<String, String[]> getArrangedMap(String[] shortest, String[] largest){
-        HashMap<String, String[]> arrangedMap = new HashMap<>();
-        arrangedMap.put(SHORTEST_KEY, shortest);
-        arrangedMap.put(LARGEST_KEY, largest);
-        return arrangedMap;
+    private static List<String[]> getArrangedList(String[] shortest, String[] largest){
+        List<String[]> arrangedList = new ArrayList<>();
+        arrangedList.add(shortest);
+        arrangedList.add(largest);
+        return arrangedList;
     }
 
     private static String decideWordBetween(String firstWord, String secondWord) {
