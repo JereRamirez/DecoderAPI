@@ -3,7 +3,7 @@ package utils;
 import domain.Coordinates;
 
 public abstract class LocationUtils {
-    private static final double EPSILON = 0.000001;
+    private static final double EPSILON = 2; //0.000001;
 
 
     public static Coordinates calculateTransmitterCoordinates(float satellite0xPosition, float satellite0yPosition, float satellite0distance,

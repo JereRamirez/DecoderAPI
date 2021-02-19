@@ -2,12 +2,10 @@ package service;
 
 import domain.Coordinates;
 import domain.Satellite;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import utils.LocationUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
