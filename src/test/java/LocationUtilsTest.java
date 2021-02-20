@@ -26,9 +26,9 @@ public class LocationUtilsTest {
     }
     @Test
     public void getLocation_validDistanceLocation_returnsLocation(){
-        float kenobisDistance = 700;
-        float skywalkerDistance = 290.5f;
-        float satoDistance = 400;
+        float kenobisDistance = 200;
+        float skywalkerDistance = 470.4f;
+        float satoDistance = 880;
         Coordinates transmitterCoordinates = locationService.getLocation(kenobisDistance, skywalkerDistance, satoDistance);
 
         Assertions.assertThat(transmitterCoordinates).isNotNull();
