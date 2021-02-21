@@ -1,6 +1,6 @@
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import utils.MessageUtils;
+import org.junit.Test;
+import com.decoder.utils.MessageUtils;
 
 public class MessageUtilsTest {
 

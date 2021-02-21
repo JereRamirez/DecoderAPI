@@ -1,17 +1,27 @@
-import domain.Coordinates;
-import domain.Satellite;
+import com.decoder.domain.Coordinates;
+import com.decoder.domain.Satellite;
+import com.decoder.service.LocationService;
+import com.decoder.service.SatelliteService;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import service.LocationService;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocationUtilsTest {
 
-    LocationService locationService;
+    private LocationService locationService;
+    private SatelliteService satelliteService;
+    private List<Satellite> satellites;
 
-    @BeforeEach
+    @Before
     public void setUp(){
-        locationService = new LocationService();
+        satelliteService = Mockito.mock(SatelliteService.class);
+        locationService = new LocationService(satelliteService);
+        satellites = new ArrayList<>();
+
         Satellite kenobiSatellite = new Satellite();
         kenobiSatellite.setName("Kenoby");
         kenobiSatellite.setCoordinates(new Coordinates(-500, -200));
@@ -22,10 +32,14 @@ public class LocationUtilsTest {
         satoSatellite.setName("Sato");
         satoSatellite.setCoordinates(new Coordinates(500, 100));
 
-        locationService.addSatellites(kenobiSatellite, skywalkerSatellite,satoSatellite);
+        satellites.add(kenobiSatellite);
+        satellites.add(skywalkerSatellite);
+        satellites.add(satoSatellite);
     }
+
     @Test
     public void getLocation_validDistanceLocation_returnsLocation(){
+        Mockito.when(satelliteService.findAll()).thenReturn(satellites);
         float kenobisDistance = 200;
         float skywalkerDistance = 470.4f;
         float satoDistance = 880;
