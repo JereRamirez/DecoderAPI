@@ -21,12 +21,9 @@ public class LocationService {
         Coordinates secondCoordinates = satellites.get(1).getCoordinates();
         Coordinates thirdCoordinates = satellites.get(2).getCoordinates();
 
-        return LocationUtils.calculateTransmitterCoordinates(firstCoordinates.getXPosition(),
-                firstCoordinates.getYPosition(), distances[0],
-                secondCoordinates.getXPosition(),
-                secondCoordinates.getYPosition(), distances[1],
-                thirdCoordinates.getXPosition(),
-                thirdCoordinates.getYPosition(), distances[2]);
+        return LocationUtils.calculateTransmitterCoordinates(firstCoordinates, distances[0],
+                secondCoordinates, distances[1],
+                thirdCoordinates, distances[2]);
 
     }
 

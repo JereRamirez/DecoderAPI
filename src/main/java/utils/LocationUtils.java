@@ -1,9 +1,10 @@
 package utils;
 
+
 import domain.Coordinates;
 
 public abstract class LocationUtils {
-    private static final double EPSILON = 0.000001;
+    private static final double EPSILON = 1;
 
 
     public static Coordinates calculateTransmitterCoordinates(Coordinates sat0Coordinates, float satellite0distance,
@@ -39,7 +40,7 @@ public abstract class LocationUtils {
         double intersectionP2_y = intersectionPoint_y - intersection_y;
 
         sat1sat2XDistance = intersectionP1_x - sat2Coordinates.getXPosition();
-        sat1sat2YDistance = intersectionP1_y - c;
+        sat1sat2YDistance = intersectionP1_y - sat2Coordinates.getYPosition();
         double firstDistance = getDistance(sat1sat2XDistance, sat1sat2YDistance);
 
         sat1sat2XDistance = intersectionP2_x - sat2Coordinates.getXPosition();
