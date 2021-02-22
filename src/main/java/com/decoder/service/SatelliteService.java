@@ -5,6 +5,7 @@ import com.decoder.domain.Satellite;
 import com.decoder.repository.SatelliteRepository;
 import com.decoder.repository.SatelliteRequestRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SatelliteService {
@@ -23,8 +25,6 @@ public class SatelliteService {
 
     @Autowired
     private final SatelliteRequestRepository satelliteRequestRepository;
-
-    private final Logger logger = LoggerFactory.getLogger(SatelliteService.class);
 
     public List<Satellite> findAll(){
         return satelliteRepository.findAll();
@@ -47,6 +47,7 @@ public class SatelliteService {
     }
 
     public HashMap<String, SatelliteRequest> sortSatellites(List<SatelliteRequest> satellites) {
+        log.info("Sorting satellites by defined order.");
         HashMap<String, SatelliteRequest> satelliteMap = new HashMap<>();
         satellites.forEach(satellite -> {
             decideSatelliteName(satelliteMap, satellite);

@@ -1,8 +1,12 @@
 package com.decoder.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
+@Slf4j
 public abstract class MessageUtils {
 
     public static final String INVALID_STRING = "invalidString";
@@ -11,13 +15,25 @@ public abstract class MessageUtils {
 
     public static String getMessage(String[]... messages){
         String[] thirdSatelliteMessage = messages[2];
+        log.info("Starting  to decode message...");
         String[] message = backtrackMessage(0, messages[0], messages[1]);
+        log.info("Message obtained from the first two satellites: ");
+        logArray(message);
+        log.info("Processing message obtained from the first two satellites with the third one...");
         return String.join(" ", backtrackMessage(0, message, thirdSatelliteMessage));
     }
 
     private static String[] backtrackMessage(int backtrackingStep, String[] firstMessage, String[] secondMessage) {
-        if(backtrackingStep < 0)
+        log.info("Starting backtracking step: {} with messages: ", backtrackingStep);
+        log.info("First message: ");
+        logArray(firstMessage);
+        log.info("Second message: ");
+        logArray(secondMessage);
+
+        if(backtrackingStep < 0){
+            log.error("This sequence produced an invalid word...");
             return new String[]{INVALID_STRING};
+        }
 
         boolean isValidState = true;
         List<String> wordsList = new ArrayList<>();
@@ -34,8 +50,9 @@ public abstract class MessageUtils {
             }
 
             String word = decideWordBetween(largestArray[largestArrayIndex], oneWord);
-
+            log.info("Word obtained: {}", word);
             if (word.equals(INVALID_STRING)) {
+                log.error("Could not get a valid word from the comparison, breaking iteration...");
                 isValidState = false;
                 break;
             }
@@ -48,6 +65,7 @@ public abstract class MessageUtils {
 
         int nextBacktrackingStep = backtrackingStep < largestArray.length ? ++backtrackingStep : -1;
 
+        log.info("Could not find a valid sequence in this step, continuing with the next one...");
         return backtrackMessage(nextBacktrackingStep, largestArray, shortestArray);
     }
 
@@ -69,6 +87,7 @@ public abstract class MessageUtils {
     }
 
     private static String decideWordBetween(String firstWord, String secondWord) {
+        log.info("Comparing words: {} {}", firstWord, secondWord);
         String result = INVALID_STRING;
         if(firstWord.equals(secondWord) || secondWord.isBlank())
             result = firstWord;
@@ -76,5 +95,9 @@ public abstract class MessageUtils {
             result = secondWord;
 
         return result;
+    }
+
+    private static void logArray(String[] message) {
+        Stream.of(message).forEach(m -> log.info("{}", m));
     }
 }

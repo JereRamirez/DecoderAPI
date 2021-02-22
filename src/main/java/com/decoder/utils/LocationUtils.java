@@ -2,50 +2,60 @@ package com.decoder.utils;
 
 
 import com.decoder.domain.Coordinates;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class LocationUtils {
     private static final double EPSILON = 1;
+    public static final String INVALID_COORDINATES = "Can not get valid coordinates from the information received.";
 
 
     public static Coordinates calculateTransmitterCoordinates(Coordinates sat0Coordinates, float satellite0distance,
                                                               Coordinates sat1Coordinates, float satellite1distance,
                                                               Coordinates sat2Coordinates, float satellite2distance){
+        log.info("Trying to get a valid coordinates from: ");
+        log.info("First satellite located in: X: {} Y: {} with a distance of: {} units.", sat0Coordinates.getXPosition(), sat0Coordinates.getYPosition(), satellite0distance);
+        log.info("Second satellite located in: X: {} Y: {} with a distance of: {} units.", sat1Coordinates.getXPosition(), sat1Coordinates.getYPosition(), satellite1distance);
+        log.info("Third satellite located in: X: {} Y: {} with a distance of: {} units.", sat2Coordinates.getXPosition(), sat2Coordinates.getYPosition(), satellite2distance);
 
-        double intersectionPointDistance, sat1sat2XDistance, sat1sat2YDistance, sat1sat2Distance, intersectionDistance, intersection_x, intersection_y;
+        double intersectionPointDistance, sat0sat1XDistance, sat0sat1YDistance, sat0sat1Distance, intersectionDistance, intersection_x, intersection_y;
         double intersectionPoint_x, intersectionPoint_y;
 
-        sat1sat2XDistance = sat1Coordinates.getXPosition() - sat0Coordinates.getXPosition();
-        sat1sat2YDistance = sat1Coordinates.getYPosition() - sat0Coordinates.getYPosition();
+        sat0sat1XDistance = sat1Coordinates.getXPosition() - sat0Coordinates.getXPosition();
+        sat0sat1YDistance = sat1Coordinates.getYPosition() - sat0Coordinates.getYPosition();
 
-        sat1sat2Distance = getDistance(sat1sat2XDistance, sat1sat2YDistance);
+        sat0sat1Distance = getDistance(sat0sat1XDistance, sat0sat1YDistance);
 
-        if (sat1sat2Distance > (satellite0distance + satellite1distance) ||
-                sat1sat2Distance < Math.abs(satellite0distance - satellite1distance)){
-            throw new IllegalArgumentException("Can not get valid coordinates from the information received.");
+        if (sat0sat1Distance > (satellite0distance + satellite1distance) ||
+                sat0sat1Distance < Math.abs(satellite0distance - satellite1distance)){
+            log.error(INVALID_COORDINATES);
+            throw new IllegalArgumentException(INVALID_COORDINATES);
         }
 
-        intersectionPointDistance = getDistance(satellite0distance, satellite1distance, sat1sat2Distance);
+        intersectionPointDistance = getDistance(satellite0distance, satellite1distance, sat0sat1Distance);
 
-        intersectionPoint_x = sat0Coordinates.getXPosition() + (sat1sat2XDistance * intersectionPointDistance/sat1sat2Distance);
-        intersectionPoint_y = sat0Coordinates.getYPosition() + (sat1sat2YDistance * intersectionPointDistance/sat1sat2Distance);
+        intersectionPoint_x = sat0Coordinates.getXPosition() + (sat0sat1XDistance * intersectionPointDistance/sat0sat1Distance);
+        intersectionPoint_y = sat0Coordinates.getYPosition() + (sat0sat1YDistance * intersectionPointDistance/sat0sat1Distance);
 
         intersectionDistance = Math.sqrt(Math.pow(satellite0distance,2) - Math.pow(intersectionPointDistance,2));
 
-        intersection_x = -sat1sat2YDistance * (intersectionDistance/sat1sat2Distance);
-        intersection_y = sat1sat2XDistance * (intersectionDistance/sat1sat2Distance);
+        intersection_x = -sat0sat1YDistance * (intersectionDistance/sat0sat1Distance);
+        intersection_y = sat0sat1XDistance * (intersectionDistance/sat0sat1Distance);
 
         double intersectionP1_x = intersectionPoint_x + intersection_x;
         double intersectionP1_y = intersectionPoint_y + intersection_y;
         double intersectionP2_x = intersectionPoint_x - intersection_x;
         double intersectionP2_y = intersectionPoint_y - intersection_y;
 
-        sat1sat2XDistance = intersectionP1_x - sat2Coordinates.getXPosition();
-        sat1sat2YDistance = intersectionP1_y - sat2Coordinates.getYPosition();
-        double firstDistance = getDistance(sat1sat2XDistance, sat1sat2YDistance);
+        log.info("New coordinates obtained with the first two satellites, defining a valid one with the third one.");
 
-        sat1sat2XDistance = intersectionP2_x - sat2Coordinates.getXPosition();
-        sat1sat2YDistance = intersectionP2_y - sat2Coordinates.getYPosition();
-        double secondDistance = getDistance(sat1sat2XDistance, sat1sat2YDistance);
+        sat0sat1XDistance = intersectionP1_x - sat2Coordinates.getXPosition();
+        sat0sat1YDistance = intersectionP1_y - sat2Coordinates.getYPosition();
+        double firstDistance = getDistance(sat0sat1XDistance, sat0sat1YDistance);
+
+        sat0sat1XDistance = intersectionP2_x - sat2Coordinates.getXPosition();
+        sat0sat1YDistance = intersectionP2_y - sat2Coordinates.getYPosition();
+        double secondDistance = getDistance(sat0sat1XDistance, sat0sat1YDistance);
 
         Coordinates transmitterCoordinates;
         if(Math.abs(firstDistance - satellite2distance) < EPSILON) {
@@ -55,8 +65,10 @@ public abstract class LocationUtils {
             transmitterCoordinates = new Coordinates((float)intersectionP2_x, (float)intersectionP2_y);
         }
         else {
-            throw new IllegalArgumentException("Can not get valid coordinates from the information received.");
+            log.error(INVALID_COORDINATES);
+            throw new IllegalArgumentException(INVALID_COORDINATES);
         }
+        log.info("Found valid Coordinates of the transmitter...");
         return transmitterCoordinates;
     }
 

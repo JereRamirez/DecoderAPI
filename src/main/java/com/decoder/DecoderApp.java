@@ -6,8 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.decoder.controller", "com.decoder.service", "com.decoder.repository"})
-public class ApplicationInitializer {
+public class DecoderApp {
     public static void main(String[] args) {
-        SpringApplication.run(ApplicationInitializer.class, args);
+        SpringApplication.run(DecoderApp.class, args);
     }
 }
