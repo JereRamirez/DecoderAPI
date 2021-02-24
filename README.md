@@ -2,7 +2,7 @@
 
 Decoder is an application that decodes the message intercepted and the position from a spaceship.
 
-## Satellites
+## SATELLITES
 This aplication counts with three satellites that intercept the message sent from the spaceship.
 They are located at:
 
@@ -18,13 +18,13 @@ Sato
 
 ```
 
-## Available endpoints
+## ENDPOINTS
 
 
- GET -> /secret_controller/topsecret_split
- Returns the message and position of the spacechip based on the requests persisted in the database.
+ **GET -> /secret_controller/topsecret_split**
+ ***Returns the message and position of the spacechip based on the requests persisted in the database.***
 
- POST -> /secret_controller/topsecret_split/{satelliteName} with Body like:
+ **POST -> /secret_controller/topsecret_split/{satelliteName} with Body like:**
 ```bash
           {
             "distance": 200.0,
@@ -33,9 +33,9 @@ Sato
           }
 ```
 
- Adds a request to the database for the satellite.       
+ ***Adds a request to the database for the satellite.***
  
- POST -> /secret_controller/topsecret with Body like:
+ **POST -> /secret_controller/topsecret with Body like:**
 ```bash
           {
             "satellites": 
@@ -58,7 +58,7 @@ Sato
               ] 
             }
 ```
-  With this request you get a valid response with response status 200 OK with Body:
+ ***With this request you get a valid response with response status 200 OK with Body:***
 ```bash  
         {
           "position": {
@@ -68,3 +68,6 @@ Sato
           "message": "este es un mensaje secreto"
         }
 ```
+## ALGORITHMS
+* The message is built with **Backtracking**.
+* The position is obtained with **Trilateracion**.
