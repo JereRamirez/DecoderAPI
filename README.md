@@ -73,7 +73,7 @@ Sato
 * The position is obtained with **Trilateracion**.
 
 ## HOST
-The application is host on: https://limitless-shelf-40709.herokuapp.com/
+The application is host on: https://alliancedecoder.herokuapp.com/
 ```
 It does not have a user interface but all endpoints are available.
 ```
