@@ -1,0 +1,14 @@
+
+\
+java:S4684:"@Replace this persistent entity with a simple POJO or DTO object.(‚š´+8Øº—Úü.
+Q
+java:S1128"4Remove this unused import 'org.slf4j.LoggerFactory'.(–ÿÚŞ8ÔÖÙü.
+Q
+java:S3740$"/Provide the parametrized type for this generic.(Á¬ÈÏûÿÿÿÿ8ÔÖÙü.
+]
+java:S1128";Remove this unused import 'lombok.RequiredArgsConstructor'.(ÑØúøÿÿÿÿ8ÔÖÙü.
+L
+java:S3740#"/Provide the parametrized type for this generic.(ì¾Ç–8ÔÖÙü.
+I
+java:S1128
+"-Remove this unused import 'org.slf4j.Logger'.(íØ®68ÔÖÙü.
