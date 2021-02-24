@@ -77,3 +77,6 @@ The application is host on: https://alliancedecoder.herokuapp.com/
 ```
 It does not have a user interface but all endpoints are available.
 ```
+
+### Available improvements
+* It was not a requirement but all the services for a Satellite and Satellite Request ABM are created, only a controller needs to be added for those endpoints.
